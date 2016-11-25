@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body ng-app="MotionBuilder" ng-controller="EditMotionController">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Enter Motion Details</h1>
+                <form class="form-horizontal motion-form">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Long Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Long Name" ng-model="motion.longName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Short Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Short Name" ng-model="motion.shortName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Year Number</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Year Number" ng-model="motion.yearNum">
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Meeting Number</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Meeting Number" ng-model="motion.meetingNum">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Motion Number</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Motion Number" ng-model="motion.motionNum">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Date</label>
+                        <div class="col-sm-9">
+                            <input type="date" class="form-control" placeholder="Date" ng-model="motion.date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Mover</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Mover" ng-model="motion.mover">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Mover's Position</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Mover's Position" ng-model="motion.moverPosition">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Seconder</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Mover" ng-model="motion.seconder">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Seconder's Position</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Mover's Position" ng-model="motion.seconderPosition">
+                        </div>
+                    </div>
+                    <hr />
+                    <h4>Votes</h4>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-9">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="motion.notVoted"> Not yet voted
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="!motion.notVoted">
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" placeholder="Favor" ng-model="motion.votesFavor">
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" placeholder="Against" ng-model="motion.votesAgainst">
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" placeholder="Abstention" ng-model="motion.votesAbstentions">
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="!motion.notVoted">
+                        <div class="col-sm-offset-3 col-sm-9">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" ng-model="motion.didPass"> Passed
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group" ng-repeat="w in motion.whereasClauses track by $index">
+                        <label class="col-sm-3 control-label">
+                            Whereas #{{$index+1}}
+                            <br />
+                            <button class="btn btn-xs btn-danger" ng-click="removeWhereas($index)">Remove</button>
+                        </label>
+                        <div class="col-sm-9 input-group">
+                            <span class="input-group-addon whereas">Whereas</span>
+                            <textarea class="form-control" aria-describedby="basic-addon3" ng-model="w.clause"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <button class="btn btn-primary btn-sm pull-right" ng-click="addWhereas()">Add Whereas</button>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Year Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Year Name" ng-model="motion.yearName">
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group" ng-repeat="o in motion.operativeClauses track by $index">
+                        <label class="col-sm-3 control-label">
+                            Operative #{{$index+1}}
+                            <br />
+                            <button class="btn btn-xs btn-danger" ng-click="removeOperative($index)">Remove</button>
+                        </label>
+                        <div class="col-sm-9 input-group">
+                            <span class="input-group-addon action">To</span>
+                            <input type="text" class="form-control" placeholder="verb" ng-model="o.verb">
+                            <textarea class="form-control" aria-describedby="basic-addon3" placeholder="clause" ng-model="o.clause"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <button class="btn btn-primary btn-sm pull-right" ng-click="addOperative()">Add Operative</button>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox"> Remember me
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default">Sign in</button>
+                        </div>
+                    </div> -->
+                </form>
+
+            </div>
+            <div class="col-md-6">
+                <h1 class="text-center">Motion Preview:</h1>
+                <div class="motion-preview"> <!--style="border: black solid 1px" -->
+                    <table class="table table-condensed motion-header">
+                        <tr>
+                            <td style="text-align: right">
+                                <span class="year_num">{{ordinal(motion.yearNum)}}</span>
+                                <span class="body_name">{{motion.shortName}}</span><br>
+                                <span class="meeting_num">Meeting {{motion.meetingNum}}</span>
+                            </td>
+                            <td width="60%">
+                                <p class="motion_identifier">{{motion.shortName[0]}} {{motion.yearNum}}-{{motion.motionNum}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="motion-details">
+                        <p class="in-the-body">In the {{motion.longName}}</p>
+                        <p class="date">{{motion.date | date:'longDate'}}</p>
+                        <p class="mover-seconder"><strong>{{motion.mover}}</strong>, {{motion.moverPosition}},</p>
+                        <p class="text-center">introduced the following motion, and</p>
+                        <p class="mover-seconder"><strong>{{motion.seconder}}</strong>, {{motion.seconderPosition}},</p>
+                        <p class="text-center">
+                            seconded this motion. This motion
+                            <span ng-if="!motion.notVoted">was {{motion.didPass ? 'passed' : 'failed'}} by a vote of</span>
+                            <span ng-if="motion.notVoted">has not yet been voted on.</span>
+                        </p>
+                        <p class="vote-count">
+                            <span ng-if="motion.notVoted">___-___-___</span>
+                            <span ng-if="!motion.notVoted">{{motion.votesFavor}}-{{motion.votesAgainst}}-{{motion.votesAbstentions}}.</span>
+                        </p>
+                    </div>
+                    <div class="motion-content">
+                        <p class="whereas-clause" ng-repeat="w in motion.whereasClauses">
+                            <span class="whereas">Whereas</span> {{w.clause}}{{getWhereasSeparator($index)}}
+                        </p>
+                        <p class="lead-in">The {{motion.yearName}} hereby RESOLVES:</p>
+                        <ol>
+                            <li class="operative-clause" ng-repeat="o in motion.operativeClauses">
+                                <span class="action">To {{o.verb}}</span>
+                                {{o.clause}}{{getOperativeSeparator($index)}}
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <br />
+                <div class="btn-toolbar pull-right">
+                    <button class="btn btn-primary" ng-click="export()" download>
+                        Export as Word Document
+                    </button>
+                    <a ng-href="/export/{{token}}" class="btn btn-success" ng-click="clearToken()" ng-if="token" download>
+                        Download motion
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0-rc.1/angular.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

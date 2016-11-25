@@ -1,0 +1,99 @@
+.motion-form {
+    margin-top: 30pt;
+}
+
+.motion-preview {
+    font-family: 'Palatino', serif;
+    max-width: 6in;
+    margin: 0 auto;
+    margin-top: 30pt;
+    padding: 0.25in;
+    border: 1pt solid black;
+}
+
+td {
+    border-top: none !IMPORTANT;
+}
+
+.motion-header, .motion-details {
+    border-bottom: 1pt solid #000;
+    padding-bottom: 6pt;
+    margin-bottom: 24pt;
+    border-top-style: none;
+}
+
+.motion-details {
+    margin-top: 20pt;
+}
+
+.year_num, .body_name, .meeting_num, .motion_identifier {
+    font-weight: bold;
+    font-variant: small-caps;
+    margin-bottom: 12pt;
+}
+
+.body_name {
+    text-transform: uppercase;
+    font-size: 11pt;
+}
+
+.body_name, .meeting_num {
+    font-size: 12pt;
+    padding: 0;
+    margin: 0;
+    line-height: 0.9;
+}
+
+.motion_identifier {
+    font-size: 32pt;
+    line-height: 0.95;
+}
+
+.in-the-body {
+    font-size: 14pt;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 12pt;
+}
+
+.date {
+    font-size: 12pt;
+    font-variant: small-caps;
+    margin-bottom: 12pt;
+    text-align: center;
+}
+
+.mover-seconder {
+    font-size: 13pt;
+    font-variant: small-caps;
+    text-align: center;
+    margin-bottom: 6pt;
+}
+
+.vote-count {
+    font-size: 13pt;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 12pt;
+}
+
+.whereas, .action {
+    font-variant: small-caps;
+}
+
+.whereas-clause {
+    font-size: 12pt;
+    margin-bottom: 12pt;
+    text-align: justify;
+}
+.lead-in {
+    font-size: 12pt;
+    padding-top: 12pt;
+    margin-bottom: 12pt;
+    font-variant: small-caps;
+}
+
+.operative-clause {
+    font-size: 12pt;
+    margin-bottom: 12pt;
+}
