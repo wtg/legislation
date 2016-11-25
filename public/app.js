@@ -41,7 +41,7 @@ app.controller('EditMotionController', ['$scope', '$http', '$window', function (
 
     $scope.export = function () {
         $http.post('/export', $scope.motion).then(function(response) {
-            // const didOpen = $window.open('/export/' + response.data);
+            var didOpen = $window.open('/export/' + response.data);
             $scope.token = response.data;
         });
     };
