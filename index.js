@@ -1,11 +1,11 @@
 'use strict'
 
 const fs = require('fs')
-const Sequelize = require('sequelize')
 const Docxtemplater = require('docxtemplater')
 const express = require('express')
 const bodyParser = require('body-parser')
 const crypto = require('crypto')
+const functions = require('./functions')
 
 const ROUTE = `${__dirname}/.temp/`
 
@@ -13,17 +13,6 @@ let tokens = []
 
 if (!fs.existsSync(ROUTE)){
     fs.mkdirSync(ROUTE);
-}
-
-function formatDate(datestring) {
-    const monthNames = [
-        "January", "February", "March", "April", "May", "June", "July",
-        "August", "September", "October", "November", "December"
-    ]
-
-    const date = new Date(datestring)
-
-    return `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
 }
 
 function prepListXML(unnumbered_clause) {
@@ -62,44 +51,13 @@ function prepListXML(unnumbered_clause) {
     </w:p>`
 }
 
-function ordinal(i) {
-    const j = i % 10, k = i % 100
-
-    return (j == 1 && k != 11 ? `${i}st` :
-                (j == 2 && k != 12 ? `${i}nd` :
-                    (j == 3 && k != 13 ? `${i}rd` : `${i}th`)))
-}
-
-function getWhereasSeparator(i, length) {
-    if(i == length - 2) return "; and";
-
-    return ";";
-};
-
-function getOperativeSeparator(i, length) {
-    if(i == length - 1) return ".";
-
-    if(i == length - 2) return ", and";
-
-    return ",";
-};
-
-// let connection = new Sequelize('stugov_legislation', 'root', 'hxdb', {
-//     host: 'localhost',
-//     dialect: 'mysql',
-//     pool: {
-//         max: 5,
-//         min: 0,
-//         idle: 10000
-//     }
-// })
-
 let app = express()
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use('/', express.static(__dirname + '/public'))
+app.use('/api', require('./routes/index.js'));
 
 app.get('/export/:token', function (req,res) {
     const index = tokens.indexOf(req.params.token);
@@ -119,18 +77,18 @@ app.post('/export', function(req, res) {
 
     motion.numberedClauses = req.body.operativeClauses
     motion.operativeClauses = [{ clause: req.body.resolves }]
-    motion.date = formatDate(req.body.date)
+    motion.date = functions.formatDate(req.body.date)
     motion.leg = req.body.shortName[0]
     motion.yr = req.body.yearNum
     motion.num = req.body.motionNum || "#"
-    motion.ordinal = req.body.yearNum ? ordinal(req.body.yearNum) : "TBD"
+    motion.ordinal = req.body.yearNum ? functions.ordinal(req.body.yearNum) : "TBD"
 
     for(let i = 0; i < motion.whereasClauses.length; i++) {
-        motion.whereasClauses[i].clause += getWhereasSeparator(i, motion.whereasClauses.length)
+        motion.whereasClauses[i].clause += functions.getWhereasSeparator(i, motion.whereasClauses.length)
     }
 
     for(let i = 0; i < motion.numberedClauses.length; i++) {
-        motion.numberedClauses[i].clause_xml = prepListXML(`To ${motion.numberedClauses[i].verb} ${motion.numberedClauses[i].clause}${getOperativeSeparator(i, motion.numberedClauses.length)}`)
+        motion.numberedClauses[i].clause_xml = prepListXML(`To ${motion.numberedClauses[i].verb} ${motion.numberedClauses[i].clause}${functions.getOperativeSeparator(i, motion.numberedClauses.length)}`)
     }
 
     // let whereas_clauses = []
@@ -155,14 +113,14 @@ app.post('/export', function(req, res) {
     //     console.log('no whereas')
     // }
 
-    // motion.date = formatDate(motion.date)
+    // motion.date = functions.formatDate(motion.date)
     // motion.leg = motion.legislation_prefix
     // motion.yr = motion.year_num
     // motion.num = motion.motion_num || "#"
     // motion.whereases = whereas_clauses
     // motion.operatives = operative_clauses
     // motion.numbereds = numbered_clauses
-    // motion.ordinal = motion.year_num ? ordinal(motion.year_num) : "TBD"
+    // motion.ordinal = motion.year_num ? functions.ordinal(motion.year_num) : "TBD"
 
     let doc = new Docxtemplater(fs.readFileSync(__dirname + "/motion_template.docx", "binary"))
 
